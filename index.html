@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>FNaF Launcher</title>
+    <style>
+        /* Use your custom horror font */
+        @font-face {
+            font-family: 'HollywoodNightmare';
+            src: url('Hollywood Nightmare.otf') format('opentype');
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: #000;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 20%, #220000 0, transparent 40%),
+                radial-gradient(circle at 80% 0%, #330000 0, transparent 45%),
+                radial-gradient(circle at 50% 100%, #050505 0, #000000 60%);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden; /* allow vertical scroll only */
+            padding-bottom: 80px;
+            position: relative;
+        }
+
+        /* Fake screen noise */
+        .noise {
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            opacity: 0.05;
+            background-image: '/Users/maggiewade/Desktop/T8IlIm3.png'
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255,255,255,0.06) 0px,
+                    rgba(255,255,255,0.06) 1px,
+                    transparent 1px,
+                    transparent 3px
+                );
+            mix-blend-mode: screen;
+            z-index: 1;
+        }
+
+        h1 {
+            font-family: 'HollywoodNightmare', Arial, sans-serif;
+            font-size: 56px;
+            letter-spacing: 6px;
+            margin-top: 80px;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            text-shadow:
+                0 0 6px #ff0000,
+                0 0 18px #ff0000,
+                3px 0 0 #3000ff,
+                -3px 0 0 #ff0000;
+            position: relative;
+            z-index: 2;
+            animation: titleFlicker 3.5s infinite steps(2);
+        }
+
+        /* Glitchy duplicate layers for the title */
+        h1::before,
+        h1::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        h1::before {
+            color: #ff0000;
+            transform: translate(-2px, 0);
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 55%);
+            opacity: 0.7;
+            animation: titleGlitch1 1.4s infinite;
+        }
+
+        h1::after {
+            color: #3000ff;
+            transform: translate(2px, 0);
+            clip-path: polygon(0 55%, 100% 45%, 100% 100%, 0 100%);
+            opacity: 0.7;
+            animation: titleGlitch2 1.1s infinite;
+        }
+
+        @keyframes titleFlicker {
+            0%, 17%, 22%, 26%, 70%, 100% { opacity: 1; }
+            18%, 21%, 24%, 68% { opacity: 0.4; }
+        }
+
+        @keyframes titleGlitch1 {
+            0% { transform: translate(-2px, 0); }
+            20% { transform: translate(-4px, -1px); }
+            40% { transform: translate(1px, 1px); }
+            60% { transform: translate(-1px, 2px); }
+            80% { transform: translate(3px, -2px); }
+            100% { transform: translate(-2px, 0); }
+        }
+
+        @keyframes titleGlitch2 {
+            0% { transform: translate(2px, 0); }
+            20% { transform: translate(4px, 1px); }
+            40% { transform: translate(-1px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(-3px, 1px); }
+            100% { transform: translate(2px, 0); }
+        }
+
+        .buttons-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button {
+            width: 360px;
+            padding: 22px;
+            margin: 18px;
+            font-size: 22px;
+            background: rgba(8, 8, 8, 0.92);
+            border: 2px solid #ff0000;
+            text-align: center;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: visible;
+            transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background 0.15s ease-out;
+        }
+
+        .button span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .button {
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .button:hover {
+            background: #ff0000;
+            color: #000;
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 24px #ff0000;
+        }
+
+        .button::before,
+        .button::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(
+                90deg,
+                rgba(255,0,0,0.4),
+                rgba(0,0,0,0.8),
+                rgba(48,0,255,0.4)
+            );
+            mix-blend-mode: screen;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .button:hover::before {
+            opacity: 0.8;
+            animation: btnGlitch1 0.25s steps(2) infinite;
+        }
+
+        .button:hover::after {
+            opacity: 0.6;
+            animation: btnGlitch2 0.35s steps(2) infinite;
+        }
+
+        @keyframes btnGlitch1 {
+            0% { clip-path: polygon(0 0,100% 0,100% 30%,0 40%); transform: translate(2px,-2px); }
+            50% { clip-path: polygon(0 60%,100% 50%,100% 80%,0 90%); transform: translate(-3px,1px); }
+            100% { clip-path: polygon(0 20%,100% 15%,100% 40%,0 45%); transform: translate(1px,2px); }
+        }
+
+        @keyframes btnGlitch2 {
+            0% { clip-path: polygon(0 40%,100% 35%,100% 55%,0 60%); transform: translate(-2px,2px); }
+            50% { clip-path: polygon(0 0,100% 5%,100% 25%,0 30%); transform: translate(3px,-1px); }
+            100% { clip-path: polygon(0 70%,100% 65%,100% 100%,0 100%); transform: translate(-1px,-2px); }
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer {
+            position: relative;
+            z-index: 2;
+            margin-top: 30px;
+            font-size: 12px;
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<h1 data-text="FNaF Launcher">FNaF Launcher</h1>
+
+<div class="buttons-wrapper">
+
+    <a href=1/index.html>
+        <div class="button"><span>Five Nights at Freddy's 1</span></div>
+    </a>
+
+    <a href=FNAF2-MAIN/index.html>
+        <div class="button"><span>Five Nights at Freddy's 2</span></div>
+    </a>
+
+    <a href=3/index.html>
+        <div class="button"><span>Five Nights at Freddy's 3</span></div>
+    </a>
+
+    <a href=4/index.html>
+        <div class="button"><span>Five Nights at Freddy's 4</span></div>
+    </a>
+
+    <a href=sl/index.html>
+        <div class="button"><span>Five Nights at Freddy's:Sister Location</span></div>
+    </a>
+
+    <a href=ps/index.html>
+        <div class="button"><span>Five Nights at Freddy's:Pizzeria Simulator</span></div>
+    </a>
+
+    <a href=ucn/index.html>
+        <div class="button"><span>Five Nights at Freddy's:Ultimate Custom Night</span></div>
+    </a>
+
+</div>
+
+<div class="footer">
+    Camera feed: CAM 01 • Signal unstable
+</div>
+
+</body>
+</html>
